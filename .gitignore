@@ -1,0 +1,10 @@
+__pycache__
+.venv
+
+logs/
+
+.env
+
+wallet_data.txt
+.DS_Store
+poetry.lock
