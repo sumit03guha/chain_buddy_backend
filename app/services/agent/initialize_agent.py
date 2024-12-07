@@ -9,6 +9,7 @@ from langgraph.prebuilt import create_react_agent
 
 from app.config.env_vars import AGENT_MODEL, OPENAI_API_KEY
 from app.constants.prompt import AGENT_PROMPT
+from app.services.agent.custom_tools.book_ticket import BookTicketInput, book_ticket
 from app.services.agent.custom_tools.movie import (
     GetLatestMoviesInput,
     GetMovieByNameInput,
@@ -87,6 +88,16 @@ def initialize_agent():
     )
 
     tools.append(get_latest_movies_tool)
+
+    book_ticket_tool = CdpTool(
+        name="book_ticket",
+        description="Book a ticket for the movie.",
+        cdp_agentkit_wrapper=agentkit,
+        args_schema=BookTicketInput,
+        func=book_ticket,
+    )
+
+    tools.append(book_ticket_tool)
 
     # persist the agent's CDP MPC Wallet Data.
     wallet_data = agentkit.export_wallet()
