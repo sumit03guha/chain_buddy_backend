@@ -9,7 +9,11 @@ from langgraph.prebuilt import create_react_agent
 
 from app.config.env_vars import AGENT_MODEL, OPENAI_API_KEY
 from app.constants.prompt import AGENT_PROMPT
-from app.services.agent.custom_tools.movie import GetMovieByNameInput, get_movie_by_name
+from app.services.agent.custom_tools.movie import (
+    GetMovieByNameInput,
+    get_movie_by_name,
+    get_upcoming_movies,
+)
 from app.services.agent.custom_tools.nook import (
     GetNookProfileInput,
     get_movies_from_nook_profile,
@@ -60,6 +64,16 @@ def initialize_agent():
     )
 
     tools.append(get_movies_from_nook_profile_tool)
+
+    get_upcoming_movies_tool = CdpTool(
+        name="get_upcoming_movies",
+        description="Get the details of the upcoming movies. Use this function to show the upcoming movies to the user.",
+        cdp_agentkit_wrapper=agentkit,
+        args_schema=None,
+        func=get_upcoming_movies,
+    )
+
+    tools.append(get_upcoming_movies_tool)
 
     # persist the agent's CDP MPC Wallet Data.
     wallet_data = agentkit.export_wallet()

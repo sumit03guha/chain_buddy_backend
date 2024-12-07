@@ -34,3 +34,20 @@ def get_movie_by_name(name: str) -> str:
         return movie_info
     else:
         return "No movie found with that title."
+
+
+def get_upcoming_movies():
+    upcoming_movies_response = movie_instance.upcoming()
+    if upcoming_movies_response is None:
+        return "No upcoming movies found."
+
+    upcoming_movies = []
+    for movie in upcoming_movies_response["results"]:
+        movie_info = {
+            "title": movie["title"],
+            "release_date": movie["release_date"],
+            "overview": movie["overview"],
+        }
+        upcoming_movies.append(movie_info)
+
+    return upcoming_movies
