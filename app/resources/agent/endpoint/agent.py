@@ -38,11 +38,9 @@ class Agent(Resource):
         try:
             data = request.get_json()
             if not data or "input" not in data:
-                print("No data provided")
                 return jsonify({"error": "No data provided"}), 400
 
             if len(data["input"]) == 0:
-                print("No data provided")
                 return jsonify({"error": "No data provided"}), 400
 
             config = {"configurable": {"thread_id": data.get("conversation_id", "")}}
@@ -61,5 +59,4 @@ class Agent(Resource):
                 },
             )
         except Exception as e:
-            print(f"Error running agent: {str(e)}")
             return jsonify({"error": str(e)}), 500

@@ -1,4 +1,3 @@
-from tkinter import S
 from typing import Iterator
 
 from langchain_core.messages import HumanMessage
@@ -9,7 +8,7 @@ from app.constants.sse import SSEType
 
 def run_agent(input, agent_executor, config) -> Iterator[str]:
     """Run the agent and yield formatted SSE messages"""
-    print("RUNNING AGENT", flush=True)
+
     try:
         for chunk in agent_executor.stream(
             {"messages": [HumanMessage(content=input)]}, config
