@@ -9,10 +9,10 @@ from langgraph.prebuilt import create_react_agent
 
 from app.config.env_vars import AGENT_MODEL, OPENAI_API_KEY
 from app.constants.prompt import AGENT_PROMPT
-from app.services.agent.custom_tools.get_balance import GetETHBalanceInput, get_balance
-from app.services.agent.custom_tools.get_coin_price import (
-    GetCoinPriceInput,
-    get_coin_price,
+from app.services.agent.custom_tools.movie import GetMovieByNameInput, get_movie_by_name
+from app.services.agent.custom_tools.nook import (
+    GetNookProfileInput,
+    get_movies_from_nook_profile,
 )
 
 wallet_data_file = "wallet_data.txt"
@@ -41,29 +41,25 @@ def initialize_agent():
     cdp_toolkit = CdpToolkit.from_cdp_agentkit_wrapper(agentkit)
     tools = cdp_toolkit.get_tools()
 
-    get_balance_tool = CdpTool(
-        name="get_balance",
-        description="""Get the current balance of ETH or tokens for an ENS address on the specified chain.The chain to get the balance for. The supported chains are:
-            - ethereum
-            - polygon
-            - base
-            - base-sepolia""",
+    get_movie_by_name_tool = CdpTool(
+        name="get_movie_by_name",
+        description="Get the details of a movie by its name.",
         cdp_agentkit_wrapper=agentkit,
-        args_schema=GetETHBalanceInput,
-        func=get_balance,
+        args_schema=GetMovieByNameInput,
+        func=get_movie_by_name,
     )
 
-    tools.append(get_balance_tool)
+    tools.append(get_movie_by_name_tool)
 
-    get_coin_details_tool = CdpTool(
-        name="get_coin_details",
-        description="Get the current details of a coin, such as price, volume, market cap, etc.",
+    get_movies_from_nook_profile_tool = CdpTool(
+        name="get_movies_from_nook_profile",
+        description="Get the details of a movie from the social Nook profile of a user, where they have shared their review of the movie. These details reflect the user's movie preferences. Use this function to get the movie reviews of the user and use it to recommend movies to the user.",
         cdp_agentkit_wrapper=agentkit,
-        args_schema=GetCoinPriceInput,
-        func=get_coin_price,
+        args_schema=GetNookProfileInput,
+        func=get_movies_from_nook_profile,
     )
 
-    tools.append(get_coin_details_tool)
+    tools.append(get_movies_from_nook_profile_tool)
 
     # persist the agent's CDP MPC Wallet Data.
     wallet_data = agentkit.export_wallet()

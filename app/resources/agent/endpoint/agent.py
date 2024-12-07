@@ -37,6 +37,8 @@ class Agent(Resource):
         """
         try:
             data = request.get_json()
+            user_name = request.headers.get("Authorization")
+
             if not data or "input" not in data:
                 return jsonify({"error": "No data provided"}), 400
 
@@ -48,7 +50,11 @@ class Agent(Resource):
             # Run the agent and stream its response
             return Response(
                 stream_with_context(
-                    run_agent(data["input"], current_app.agent_executor, config)
+                    run_agent(
+                        data["input"] + "The name of the user is " + user_name + ".",
+                        current_app.agent_executor,
+                        config,
+                    )
                 ),
                 mimetype="text/event-stream",
                 headers={
