@@ -10,7 +10,10 @@ from langgraph.prebuilt import create_react_agent
 from app.config.env_vars import AGENT_MODEL, OPENAI_API_KEY
 from app.constants.prompt import AGENT_PROMPT
 from app.services.agent.custom_tools.movie import (
+    GetLatestMoviesInput,
     GetMovieByNameInput,
+    GetUpcomingMoviesInput,
+    get_latest_movies,
     get_movie_by_name,
     get_upcoming_movies,
 )
@@ -69,11 +72,21 @@ def initialize_agent():
         name="get_upcoming_movies",
         description="Get the details of the upcoming movies. Use this function to show the upcoming movies to the user.",
         cdp_agentkit_wrapper=agentkit,
-        args_schema=None,
+        args_schema=GetUpcomingMoviesInput,
         func=get_upcoming_movies,
     )
 
     tools.append(get_upcoming_movies_tool)
+
+    get_latest_movies_tool = CdpTool(
+        name="get_latest_movies",
+        description="Get the details of the latest movies. Use this function to show the latest movies to the user.",
+        cdp_agentkit_wrapper=agentkit,
+        args_schema=GetLatestMoviesInput,
+        func=get_latest_movies,
+    )
+
+    tools.append(get_latest_movies_tool)
 
     # persist the agent's CDP MPC Wallet Data.
     wallet_data = agentkit.export_wallet()

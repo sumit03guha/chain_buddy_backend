@@ -15,6 +15,14 @@ class GetMovieByNameInput(BaseModel):
     name: str = Field(..., description="Name of the movie")
 
 
+class GetUpcomingMoviesInput(BaseModel):
+    name: str = Field(..., description="Name of the movie")
+
+
+class GetLatestMoviesInput(BaseModel):
+    name: str = Field(..., description="Name of the movie")
+
+
 def get_movie_by_name(name: str) -> str:
     results = movie_instance.search(name)
 
@@ -36,7 +44,7 @@ def get_movie_by_name(name: str) -> str:
         return "No movie found with that title."
 
 
-def get_upcoming_movies():
+def get_upcoming_movies(name: str):
     upcoming_movies_response = movie_instance.upcoming()
     if upcoming_movies_response is None:
         return "No upcoming movies found."
@@ -51,3 +59,13 @@ def get_upcoming_movies():
         upcoming_movies.append(movie_info)
 
     return upcoming_movies
+
+
+def get_latest_movies(name: str):
+    latest_movies_response = movie_instance.latest()
+
+    return {
+        "title": latest_movies_response.title,
+        "release_date": latest_movies_response.release_date,
+        "overview": latest_movies_response.overview,
+    }
