@@ -22,10 +22,11 @@ LOG_FILE: str = os.path.join(LOG_DIR, "agent-ai.log")
 # CORS HEADER
 CORS_HEADER: str = os.environ["CORS_HEADER"]
 
-OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
-AGENT_MODEL = os.environ["AGENT_MODEL"]
+OPENAI_API_KEY: str = os.environ["OPENAI_API_KEY"]
+AGENT_MODEL: str = os.environ["AGENT_MODEL"]
 
-COIN_GECKO_API_KEY = os.environ["COIN_GECKO_API_KEY"]
-TMDB_API_KEY = os.environ["TMDB_API_KEY"]
+COIN_GECKO_API_KEY: str = os.environ["COIN_GECKO_API_KEY"]
+TMDB_API_KEY: str = os.environ["TMDB_API_KEY"]
 
-NFT_CONTRACT_ADDRESS = os.environ["NFT_CONTRACT_ADDRESS"]
+NFT_CONTRACT_ADDRESS: str = os.environ["NFT_CONTRACT_ADDRESS"]
+STORAGE_FOLDER: str = os.environ["STORAGE_FOLDER"]

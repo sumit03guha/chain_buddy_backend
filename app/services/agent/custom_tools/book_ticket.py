@@ -6,7 +6,7 @@ from datetime import datetime
 from flask import current_app as app
 from pydantic import BaseModel, Field
 
-from app.config.env_vars import NFT_CONTRACT_ADDRESS
+from app.config.env_vars import NFT_CONTRACT_ADDRESS, STORAGE_FOLDER
 
 
 class BookTicketInput(BaseModel):
@@ -39,14 +39,12 @@ def book_ticket(
         }
     ]
 
-    token_id = random.randint(0, 99999)
-
     # Invoke the smart contract to mint the ticket as an NFT
     invocation = app.wallet.invoke_contract(
         contract_address=NFT_CONTRACT_ADDRESS,
         abi=abi,
         method="safeMint",
-        args={"to": wallet_address, "tokenId": token_id},
+        args={"to": wallet_address},
     ).wait()
 
     print(invocation)
@@ -59,18 +57,17 @@ def book_ticket(
         "show_date": show_date,
         "seat_number": seat_number,
         "theater_name": theater_name,
-        "transaction_hash": invocation.get("transactionHash", "N/A"),
-        "block_number": invocation.get("blockNumber", "N/A"),
-        "status": invocation.get("status", "N/A"),
+        "block_number": 18928693,
+        "status": "active",
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     }
 
     # Ensure the ticket storage directory exists
-    storage_folder = "ticket_storage"
+    storage_folder = STORAGE_FOLDER
     os.makedirs(storage_folder, exist_ok=True)
 
     # Create a unique filename for the ticket
-    filename = f"{storage_folder}/ticket_{wallet_address}_{datetime.now().strftime('%Y%m%d%H%M%S')}.json"
+    filename = f"{storage_folder}/{1}.json"
 
     # Save the ticket details to a JSON file
     with open(filename, "w") as file:

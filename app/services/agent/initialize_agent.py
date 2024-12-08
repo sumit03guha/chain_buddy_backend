@@ -10,10 +10,7 @@ from langgraph.prebuilt import create_react_agent
 from app.config.env_vars import AGENT_MODEL, OPENAI_API_KEY
 from app.constants.prompt import AGENT_PROMPT
 from app.services.agent.custom_tools.book_ticket import BookTicketInput, book_ticket
-from app.services.agent.custom_tools.get_tx_info import (
-    GetTxInfoInput,
-    get_tx_info,
-)
+from app.services.agent.custom_tools.get_tx_info import GetTxInfoInput, get_tx_info
 from app.services.agent.custom_tools.movie import (
     GetLatestMoviesInput,
     GetMovieByNameInput,
@@ -95,7 +92,7 @@ def initialize_agent():
 
     book_ticket_tool = CdpTool(
         name="book_ticket",
-        description="Book a ticket for the movie.",
+        description="Book a ticket for the movie. Ensure that the user has made the payment for the ticket. This should be called after calling the get_tx_info tool. ALso, ensure that the user has provided their wallet address.",
         cdp_agentkit_wrapper=agentkit,
         args_schema=BookTicketInput,
         func=book_ticket,

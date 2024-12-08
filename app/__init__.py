@@ -2,6 +2,7 @@ from flask import Flask
 
 from app.config.logger import setup_logger
 from app.resources.agent.app import agent_blueprint
+from app.resources.nft.app import nft_blueprint
 
 
 def create_app() -> Flask:
@@ -18,5 +19,6 @@ def create_app() -> Flask:
 
 def register_blueprints(app: Flask) -> None:
     app.register_blueprint(agent_blueprint, url_prefix="/api/agent")
+    app.register_blueprint(nft_blueprint, url_prefix="/api/nft")
 
     app.logger.info("Blueprints registered")

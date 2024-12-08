@@ -8,3 +8,5 @@ logs/
 wallet_data.txt
 .DS_Store
 poetry.lock
+
+nft_store/
