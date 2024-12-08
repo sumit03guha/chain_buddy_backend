@@ -10,6 +10,10 @@ from langgraph.prebuilt import create_react_agent
 from app.config.env_vars import AGENT_MODEL, OPENAI_API_KEY
 from app.constants.prompt import AGENT_PROMPT
 from app.services.agent.custom_tools.book_ticket import BookTicketInput, book_ticket
+from app.services.agent.custom_tools.get_tx_info import (
+    GetTxInfoInput,
+    get_tx_info,
+)
 from app.services.agent.custom_tools.movie import (
     GetLatestMoviesInput,
     GetMovieByNameInput,
@@ -98,6 +102,16 @@ def initialize_agent():
     )
 
     tools.append(book_ticket_tool)
+
+    get_tx_info_tool = CdpTool(
+        name="get_tx_info",
+        description="Get the details of the transaction hash shared by the user after making the payment for the ticket. Use this function to assert whether the user wallet address has paid the agent address. This should be called before booking the ticket or calling the book_ticket_tool.",
+        cdp_agentkit_wrapper=agentkit,
+        args_schema=GetTxInfoInput,
+        func=get_tx_info,
+    )
+
+    tools.append(get_tx_info_tool)
 
     # persist the agent's CDP MPC Wallet Data.
     wallet_data = agentkit.export_wallet()
